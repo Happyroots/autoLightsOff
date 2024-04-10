@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开关灯功能</title>
+<style>
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
+}
+
+#light {
+  width: 200px;
+  height: 200px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#light.on {
+  background-color: yellow;
+}
+</style>
+</head>
+<body>
+<div id="light" onclick="toggleLight()">
+  <div id="switch"></div>
+</div>
+
+<script>
+let isOn = false;
+
+function toggleLight() {
+  const light = document.getElementById('light');
+  isOn = !isOn;
+  if (isOn) {
+    light.classList.add('on');
+    sendLightState(true);
+  } else {
+    light.classList.remove('on');
+    sendLightState(false);
+  }
+}
+
+function sendLightState(state) {
+  // 使用XMLHttpRequest发送POST请求到ESP32服务器
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/", state);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(JSON.stringify({ state: state }));
+}
+
+    
+</script>
+</body>
+</html>
+
